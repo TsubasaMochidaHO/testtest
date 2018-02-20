@@ -1,0 +1,30 @@
+version: '2'
+services:
+    app:
+        build: php
+        volumes:
+            - ./html/symfony-acl-sample:/var/www/html
+        ports:
+            - "8000:80"
+        container_name: phpacl
+        depends_on:
+            - mysql
+    
+    mysql:
+        image: mysql
+        volumes:
+            - ./db:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=pass
+        container_name: aclmysql
+    
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        environment:
+            - PMA_HOST=mysql
+            - PMA_USER=root
+            - PMA_PASSWORD=pass
+        links:
+            - mysql
+        ports:
+            - 8080:80
